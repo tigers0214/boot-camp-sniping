@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Boot Camp Sniping">
+    <title>Boot Camp Sniping</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbit&display=swap" rel="stylesheet">
+</head>
+<body>
+
+
+    <div id="landing-screen">
+        <div class="landing-overlay"></div>
+        <div class="landing-layout">
+
+            <div class="info-panel info-left">
+                <h3 class="info-title">조작법</h3>
+                <div class="info-items">
+                    <div class="info-item"><kbd>LMB</kbd><span>발사</span></div>
+                    <div class="info-item"><kbd>RMB</kbd><span>조준 On / Off</span></div>
+                    <div class="info-item"><kbd>Mouse</kbd><span>움직임</span></div>
+                    <div class="info-item"><kbd>Esc</kbd><span>일시정지</span></div>
+                </div>
+                <div class="info-divider"></div>
+                <div class="info-note">
+                    <p>● 제한시간 60초</p>
+                </div>
+            </div>
+
+            <div class="landing-center">
+                <div class="logo-container">
+                    <h1 class="logo-title">
+                        <span class="logo-line1">Boot Camp</span>
+                        <span class="logo-line2">Sniping</span>
+                    </h1>
+                    <div class="logo-tagline">-- FPS 슈팅 게임 --</div>
+                </div>
+                <button id="play-btn" class="btn-play" type="button">
+                    <span class="btn-text">게임 시작</span>
+                </button>
+            </div>
+
+            <!-- Right: Scoring -->
+            <div class="info-panel info-right">
+                <h3 class="info-title">점수 산출</h3>
+                <div class="info-items">
+                    <div class="score-row"><span class="score-dist">100m</span><span class="score-pts">100점</span></div>
+                    <div class="score-row"><span class="score-dist">200m</span><span class="score-pts">200점</span></div>
+                    <div class="score-row"><span class="score-dist">300m</span><span class="score-pts">300점</span></div>
+                </div>
+                <div class="info-divider"></div>
+                <div class="info-note">
+                    <p>● 표적은 접히고 펴집니다</p>
+                    <p>● 결과에 명중률 표시</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="hud" class="hidden">
+        <div id="timer" class="hud-timer">60</div>
+        <div id="score" class="hud-score">점수: 0</div>
+        <div id="crosshair">
+            <div class="ch-line ch-top"></div>
+            <div class="ch-line ch-right"></div>
+            <div class="ch-line ch-bottom"></div>
+            <div class="ch-line ch-left"></div>
+            <div class="ch-dot"></div>
+        </div>
+        <div id="reload-indicator" class="hidden">
+            <div class="reload-bar"><div class="reload-fill"></div></div>
+            <span class="reload-text">재장전 중...</span>
+        </div>
+        <div id="hit-marker" class="hidden"></div>
+    </div>
+
+    <div id="scope-overlay" class="hidden">
+        <div class="scope-circle">
+            <div class="scope-line scope-h"></div>
+            <div class="scope-line scope-v"></div>
+            <div class="scope-mil v1"></div><div class="scope-mil v2"></div><div class="scope-mil v3"></div>
+            <div class="scope-mil h1"></div><div class="scope-mil h2"></div>
+            <div class="scope-mil h3"></div><div class="scope-mil h4"></div>
+            <div class="scope-range r1">1</div>
+            <div class="scope-range r2">2</div>
+            <div class="scope-range r3">3</div>
+        </div>
+    </div>
+
+    <div id="muzzle-flash" class="hidden"></div>
+
+    <div id="pause-screen" class="hidden">
+        <div class="pause-panel">
+            <h2 class="pause-title">일시정지</h2>
+            <div class="pause-buttons">
+                <button id="resume-btn" class="btn-retry" type="button">계속</button>
+                <button id="pause-retry-btn" class="btn-retry btn-secondary" type="button">재시도</button>
+                <button id="pause-menu-btn" class="btn-menu" type="button">메인 메뉴</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="gameover-screen" class="hidden">
+        <div class="gameover-panel">
+            <h2 class="go-title">시간 초과</h2>
+            <div class="go-score-box">
+                <div class="go-score-label">최종 점수</div>
+                <div id="final-score" class="go-score-value">0</div>
+            </div>
+            <div class="go-stats">
+                <div class="go-stat"><span class="go-stat-val" id="final-hits">0</span><span class="go-stat-lbl">명중</span></div>
+                <div class="go-stat-divider"></div>
+                <div class="go-stat"><span class="go-stat-val" id="final-shots">0</span><span class="go-stat-lbl">발사수</span></div>
+                <div class="go-stat-divider"></div>
+                <div class="go-stat"><span class="go-stat-val" id="final-accuracy">0%</span><span class="go-stat-lbl">명중률</span></div>
+            </div>
+            <div class="go-buttons">
+                <button id="retry-btn" class="btn-retry" type="button">재시도</button>
+                <button id="menu-btn" class="btn-menu" type="button">메인 메뉴</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-container"></div>
+
+    <script type="importmap">
+    { 
+        "imports": { 
+            "three": "https://unpkg.com/three@latest/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@latest/examples/jsm/"
+        } 
+    }
+    </script>
+    <script type="module" src="game.js?v=4"></script>
+</body>
+</html>
